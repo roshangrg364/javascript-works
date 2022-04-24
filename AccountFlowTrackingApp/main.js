@@ -111,7 +111,7 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 /////////////////////////////////////////////////
 
-let currentUserAccount;
+let currentUserAccount, timer;
 
 function FormatDate(account) {
   const now = new Date();
@@ -232,6 +232,25 @@ userNames(accounts);
 
 //login functionality implementation
 
+const setLogInTimeOut = function () {
+  let maxTime = 30;
+  const tick = function () {
+    const min = String(Math.round(maxTime / 60)).padStart(2, 0);
+    const sec = String(Math.round(maxTime % 60)).padStart(2, 0);
+    labelTimer.textContent = `${min} : ${sec}`;
+    if (maxTime == 0) {
+      containerApp.style.opacity = 0;
+      clearInterval(timer);
+    }
+    maxTime--;
+  };
+  const timer = setInterval(() => {
+    tick();
+  }, 1000);
+
+  return timer;
+};
+
 btnLogin.addEventListener("click", (e) => {
   e.preventDefault();
   currentUserAccount = accounts.find((acc) => {
@@ -249,6 +268,8 @@ btnLogin.addEventListener("click", (e) => {
   inputLoginPin.value = "";
   inputLoginPin.blur();
   userNameLabel.textContent = `(${currentUserAccount.owner})`;
+  if (timer) clearInterval(timer);
+  timer = setLogInTimeOut();
   UpdateUI(currentUserAccount);
   labelDate.textContent = FormatDate(currentUserAccount);
 });
@@ -295,6 +316,9 @@ btnTransfer.addEventListener("click", function (e) {
   inputTransferTo.blur();
 
   UpdateUI(currentUserAccount);
+
+  clearInterval(timer);
+  timer = setLogInTimeOut();
 });
 
 //close account functionality
@@ -340,6 +364,9 @@ btnLoan.addEventListener("click", function (e) {
   } else {
     alert("request is invalid");
   }
+
+  clearInterval(timer);
+  timer = setLogInTimeOut();
 });
 let isSorted = false;
 btnSort.addEventListener("click", function (event) {
