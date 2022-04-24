@@ -289,7 +289,7 @@ btnLoan.addEventListener("click", function (e) {
     .some((mov) => mov >= (requestedLoan * depositPercent) / 100);
   if (IsRequestValid) {
     currentUserAccount.movements.push(Number(requestedLoan));
-    currentUserAccount.movementsDates.push(new date().toISOString());
+    currentUserAccount.movementsDates.push(new Date().toISOString());
     UpdateUI(currentUserAccount);
 
     inputLoanAmount.value = "";
