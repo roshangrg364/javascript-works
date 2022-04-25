@@ -138,4 +138,20 @@ const observer = new IntersectionObserver(stickNav, {
 });
 observer.observe(header);
 
-//
+// show items on scrolling
+
+const sections = document.querySelectorAll(".section");
+const sectionReveal = function (entries, observer) {
+  const entry = entries[0];
+  if (entry.isIntersecting == false) return;
+  entry.target.classList.remove("section--hidden");
+  observer.unobserve(entry.target);
+};
+const sectionObserver = new IntersectionObserver(sectionReveal, {
+  root: null,
+  threshold: 0.15,
+});
+sections.forEach((section) => {
+  section.classList.add("section--hidden");
+  sectionObserver.observe(section);
+});
